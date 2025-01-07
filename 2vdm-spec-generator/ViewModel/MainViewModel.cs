@@ -101,16 +101,18 @@ namespace _2vdm_spec_generator.ViewModel
                     {
                         ProjectRootPath = result.Folder.Path;
                         LoadedItems.Clear();
+
                         // 選択フォルダ以下のすべてのディレクトリとフォルダを読み込む
                         await LoadFolder(ProjectRootPath, LoadedItems);
 
                         // ツリーを辞書順にソート
                         SortFileSystemItems(LoadedItems);
 
-                        // TreeItemsに選択フォルダ(プロジェクトルート)直下のアイテムのみを追加
+                        // rootItemsにProjectRootPathを含めたすべての直下アイテムを追加
                         var rootItems = LoadedItems.Where(i =>
-                            i.FullPath.StartsWith(ProjectRootPath + Path.DirectorySeparatorChar) &&
-                            !i.FullPath.Substring(ProjectRootPath.Length + 1).Contains(Path.DirectorySeparatorChar)
+                            // (i.FullPath.StartsWith(ProjectRootPath + Path.DirectorySeparatorChar) &&
+                            // !i.FullPath.Substring(ProjectRootPath.Length + 1).Contains(Path.DirectorySeparatorChar)) ||
+                            i.FullPath.Equals(ProjectRootPath, StringComparison.OrdinalIgnoreCase)
                         );
 
                         TreeItems.Clear();
